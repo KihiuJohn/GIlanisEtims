@@ -1,0 +1,21 @@
+﻿// Decompiled with JetBrains decompiler
+// Type: eTims.CodesItem
+// Assembly: eTims, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: C61D8E78-3ACD-462F-AD73-596C69F51E41
+// Assembly location: C:\Users\Tact\Downloads\ETIMSV12\Bin\eTims.dll
+
+using System.Collections.Generic;
+
+#nullable disable
+namespace eTims;
+
+public class CodesItem
+{
+  public string cdCls { get; set; }
+
+  public string cdClsNm { get; set; }
+
+  public string userDfnNm1 { get; set; }
+
+  public List<StandCodes> dtlList { get; set; }
+}
