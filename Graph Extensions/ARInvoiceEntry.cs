@@ -566,6 +566,8 @@ public class ARInvoiceEntry_Extension_Etims : PXGraphExtension<ARInvoiceEntry>
         {
           (object) tran.UOM
         })));
+        if (uomMapping == null)
+          throw new PXException($"UOM Mapping not found for UOM '{tran.UOM}' on line {tran.LineNbr}. Please configure the UOM mapping.");
         Decimal valueOrDefault = ((Decimal?) ((TaxCdes)(PXSelectBase<TaxCdes, PXSelect<TaxCdes, Where<TaxCdes.taxCategories, Equal<Required<InventoryItem.taxCategoryID>>>>.Config>.Select((PXGraph) this.Base, new object[1]
         {
           (object) tran.TaxCategoryID
@@ -620,16 +622,18 @@ public class ARInvoiceEntry_Extension_Etims : PXGraphExtension<ARInvoiceEntry>
           (object) tran.InventoryID
         })));
         if (inventoryItem == null)
-          PXTrace.WriteInformation("inv is null");
-        else
-          PXTrace.WriteInformation($"inv is not null, {inventoryItem.InventoryID}, {inventoryItem.InventoryCD}");
+          throw new PXException($"Inventory item not found for line {tran.LineNbr}.");
+        PXTrace.WriteInformation($"inv is not null, {inventoryItem.InventoryID}, {inventoryItem.InventoryCD}");
         InventoryItemExtEtims extension3 = PXCache<InventoryItem>.GetExtension<InventoryItemExtEtims>(inventoryItem);
         if (extension3 == null)
-          PXTrace.WriteInformation("INVENTORY EXTENSION IS EMPTY");
-        else
-          PXTrace.WriteInformation($"INV EXT, {extension3.UsrItemClassificationCode}, {extension3.UsrTaxCodes}");
-        if (string.IsNullOrEmpty(inventoryItem.InventoryCD) || string.IsNullOrEmpty(extension3.UsrItemClassificationCode) || string.IsNullOrEmpty(extension3.UsrTaxCodes))
-          throw new PXException($"Please check if item classification code, tax code for item id {inventoryItem.InventoryCD.Trim()} has been configured");
+          throw new PXException($"eTIMS extension not found for item '{inventoryItem.InventoryCD}' on line {tran.LineNbr}. Please ensure the item is configured for eTIMS.");
+        PXTrace.WriteInformation($"INV EXT, {extension3.UsrItemClassificationCode}, {extension3.UsrTaxCodes}");
+        string itemCd = inventoryItem.InventoryCD ?? string.Empty;
+        string itemCdTrimmed = string.IsNullOrEmpty(itemCd) ? string.Empty : itemCd.Trim();
+        string usrItemClassificationCode = extension3.UsrItemClassificationCode ?? string.Empty;
+        string usrTaxCodes = extension3.UsrTaxCodes ?? string.Empty;
+        if (string.IsNullOrEmpty(itemCdTrimmed) || string.IsNullOrEmpty(usrItemClassificationCode) || string.IsNullOrEmpty(usrTaxCodes))
+          throw new PXException($"Please check if item classification code, tax code for item id '{itemCdTrimmed}' on line {tran.LineNbr} has been configured");
         int num26 = -1;
         string str1;
         string str2;
@@ -711,18 +715,22 @@ public class ARInvoiceEntry_Extension_Etims : PXGraphExtension<ARInvoiceEntry>
         }
         if (num26 == -1)
           throw new PXException($"Item {tran.InventoryID} does not have an iSaleID in branch.");
+        string itemCdForData = inventoryItem.InventoryCD ?? string.Empty;
+        string packagingUnitForData = packagingUnit ?? string.Empty;
+        string unitOfQuantityForData = unitOfQuantity ?? string.Empty;
+        string tranDescForData = tran.TranDesc ?? string.Empty;
         var data = new
         {
           itemSeq = index + 1,
           itemID = num26,
-          itemCd = inventoryItem.InventoryCD.Trim(),
+          itemCd = itemCdForData.Trim(),
           itemClsCd = str1,
-          itemNm = tran.TranDesc ?? "",
-          itemNmDef = tran.TranDesc ?? "",
+          itemNm = tranDescForData,
+          itemNmDef = tranDescForData,
           bcd = "",
-          pkgUnitCd = packagingUnit.Trim(),
+          pkgUnitCd = packagingUnitForData.Trim(),
           pkg = num16,
-          qtyUnitCd = unitOfQuantity.Trim(),
+          qtyUnitCd = unitOfQuantityForData.Trim(),
           qty = num16,
           prc = num19,
           splyAmt = num20,

@@ -13,37 +13,60 @@ public class RefreshTokenProcess : PXGraph<RefreshTokenProcess>
   public PXCancel<DeviceInitialise> Cancel;
 
   [PXFilterable(new Type[] { })]
-  public PXProcessing<DeviceInitialise> Devices;
+  public PXProcessing<DeviceInitialise, Where<DeviceInitialise.active, Equal<True>>> ProcessingView;
 
   public RefreshTokenProcess()
   {
-    PXTrace.WriteInformation("[RefreshTokenProcess] graph constructed");
-    this.Devices.SetProcessCaption("Refresh Token");
-    this.Devices.SetProcessAllCaption("Refresh All Tokens");
-    this.Devices.SetProcessDelegate(devices => ProcessSelectedDevices(devices));
+    PXTrace.WriteInformation("[RefreshTokenProcess] graph constructed - Setting delegate");
+    this.ProcessingView.SetProcessCaption("Refresh Token");
+    this.ProcessingView.SetProcessAllCaption("Refresh All Tokens");
+    this.ProcessingView.SetProcessDelegate(new PXProcessingBase<DeviceInitialise>.ProcessListDelegate(Process));
+    PXTrace.WriteInformation("[RefreshTokenProcess] delegate set");
   }
 
-  public static void ProcessSelectedDevices(List<DeviceInitialise> devices)
+  private static void Process(List<DeviceInitialise> list)
   {
-    PXTrace.WriteInformation($"[RefreshTokenProcess] ProcessSelectedDevices fired. Row count = {devices?.Count ?? -1}");
-    if (devices == null || devices.Count == 0)
-      throw new PXException("No DeviceInitialise rows to process.");
-
-    DeviceInitializeMaint graph = PXGraph.CreateInstance<DeviceInitializeMaint>();
-    for (int index = 0; index < devices.Count; ++index)
+    try
     {
-      DeviceInitialise device = devices[index];
-      if (device == null) continue;
-      try
+      PXTrace.WriteInformation($"[RefreshTokenProcess] Process STARTED. Row count = {list?.Count ?? -1}");
+      if (list == null || list.Count == 0)
       {
-        RefreshToken(graph, device);
-        PXProcessing<DeviceInitialise>.SetInfo(index, $"Token refreshed for branch {device.BranchID}.");
+        PXTrace.WriteInformation("[RefreshTokenProcess] List is null or empty - throwing exception");
+        throw new PXException("No DeviceInitialise rows to process.");
       }
-      catch (Exception ex)
+
+      PXTrace.WriteInformation($"[RefreshTokenProcess] Creating DeviceInitializeMaint graph");
+      DeviceInitializeMaint graph = PXGraph.CreateInstance<DeviceInitializeMaint>();
+      PXTrace.WriteInformation($"[RefreshTokenProcess] Graph created. Starting loop for {list.Count} devices");
+      
+      for (int index = 0; index < list.Count; ++index)
       {
-        PXTrace.WriteError($"[RefreshTokenProcess] BranchID={device.BranchID} failed: {ex}");
-        PXProcessing<DeviceInitialise>.SetError(index, new PXException(ex.Message));
+        DeviceInitialise device = list[index];
+        PXTrace.WriteInformation($"[RefreshTokenProcess] Processing device index {index}, BranchID={device?.BranchID}");
+        if (device == null) 
+        {
+          PXTrace.WriteInformation("[RefreshTokenProcess] Device is null, skipping");
+          continue;
+        }
+        try
+        {
+          PXTrace.WriteInformation($"[RefreshTokenProcess] Calling RefreshToken for BranchID={device.BranchID}");
+          RefreshToken(graph, device);
+          PXTrace.WriteInformation($"[RefreshTokenProcess] RefreshToken succeeded for BranchID={device.BranchID}");
+          PXProcessing<DeviceInitialise>.SetInfo(index, $"Token refreshed for branch {device.BranchID}.");
+        }
+        catch (Exception ex)
+        {
+          PXTrace.WriteError($"[RefreshTokenProcess] BranchID={device.BranchID} failed: {ex}");
+          PXProcessing<DeviceInitialise>.SetError(index, new PXException(ex.Message));
+        }
       }
+      PXTrace.WriteInformation($"[RefreshTokenProcess] Process COMPLETED");
+    }
+    catch (Exception ex)
+    {
+      PXTrace.WriteError($"[RefreshTokenProcess] Process method exception: {ex}");
+      throw;
     }
   }
 

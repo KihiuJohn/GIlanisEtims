@@ -1,36 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!--Project was exported from assembly: C:\Users\Tact\Downloads\ETIMSV12\Bin\eTims.dll-->
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0CF1B557-4424-4285-8604-00B09ABE54CD}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <TargetFramework>net48</TargetFramework>
     <AssemblyName>eTims</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <ApplicationVersion>1.0.0.0</ApplicationVersion>
-    <FileAlignment>512</FileAlignment>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Configurations>Debug;Release</Configurations>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
     <AcumaticaBin>C:\Program Files\Acumatica ERP\Gilanis\Bin</AcumaticaBin>
@@ -59,105 +49,6 @@
     <Reference Include="PX.DbServices"><HintPath>$(AcumaticaBin)\PX.DbServices.dll</HintPath><Private>False</Private></Reference>
     <Reference Include="PX.SM"><HintPath>$(AcumaticaBin)\PX.SM.dll</HintPath><Private>False</Private></Reference>
     <Reference Include="PX.TM"><HintPath>$(AcumaticaBin)\PX.TM.dll</HintPath><Private>False</Private></Reference>
-    <Reference Include="GDLOrderCustomization"><HintPath>$(AcumaticaBin)\GDLOrderCustomization.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="GDLOrderCustomization"><HintPath>C:\Program Files\Acumatica ERP\Gilanis\App_Data\Bin\GDLOrderCustomization.dll</HintPath><Private>False</Private></Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="DAC\PurchaseReceiptType.cs" />
-    <Compile Include="DAC Extensions\DeviceInitialiseExtEtims.cs" />
-    <Compile Include="DAC\GetExportItem.cs" />
-    <Compile Include="DAC\ImportZRA.cs" />
-    <Compile Include="DAC\PurchaseZRA.cs" />
-    <Compile Include="DAC\RefreshToken.cs" />
-    <Compile Include="DAC\RequestGetExport.cs" />
-    <Compile Include="DAC\RequestPurchases.cs" />
-    <Compile Include="DAC\ZRAPurchaseItem.cs" />
-    <Compile Include="DAC\ClassCodeRequest.cs" />
-    <Compile Include="Graph\ClassificationCodesMaint.cs" />
-    <Compile Include="DAC\DeviceInfo.cs" />
-    <Compile Include="DAC\DeviceInitialise.cs" />
-    <Compile Include="Graph\DeviceInitializeMaint.cs" />
-    <Compile Include="Graph\RefreshTokenProcess.cs" />
-    <Compile Include="DAC\EtimsCode.cs" />
-    <Compile Include="Graph\EtimsKraCodeMaint.cs" />
-    <Compile Include="Graph\EtimsMaint.cs" />
-    <Compile Include="DAC\EtimsSetup.cs" />
-    <Compile Include="Graph\EtimsSetupMaint.cs" />
-    <Compile Include="DAC\InventoryClassification.cs" />
-    <Compile Include="Graph\GetExportMaint.cs" />
-    <Compile Include="Graph\ImportResponse.cs" />
-    <Compile Include="Graph\ImportZRAMaint.cs" />
-    <Compile Include="Graph\InventoryClassificationMaint.cs" />
-    <Compile Include="DAC\ItemClasses.cs" />
-    <Compile Include="Graph\ItemClassesMaint.cs" />
-    <Compile Include="DAC\ItemClassificationCodes.cs" />
-    <Compile Include="Graph\ItemsMaint.cs" />
-    <Compile Include="Graph\PurchaseRequest.cs" />
-    <Compile Include="Graph\RegisterItemsMaint.cs" />
-    <Compile Include="DAC\RegisterItems.cs" />
-    <Compile Include="DAC\UomMapping.cs" />
-    <Compile Include="Graph\RequestPurchaseMaint.cs" />
-    <Compile Include="Graph\ZRAPurchaseMaint.cs" />
-    <Compile Include="ResponseData.cs" />
-    <Compile Include="Graph\UnitMappingMaint.cs" />
-    <Compile Include="Graph\QuantityMaint.cs" />
-    <Compile Include="EtimsMessages.cs" />
-    <Compile Include="Graph\TaxCodeMaint.cs" />
-    <Compile Include="DAC\QuantityUnit.cs" />
-    <Compile Include="DAC\KRATaxCodes.cs" />
-    <Compile Include="Graph\PackageMaint.cs" />
-    <Compile Include="DAC\Packaging.cs" />
-    <Compile Include="DAC\TaxCdes.cs" />
-    <Compile Include="DAC\PaymentMethodKRA.cs" />
-    <Compile Include="Graph\RegisterNonItemsMaint.cs" />
-    <Compile Include="Graph\timsCodMaint.cs" />
-    <Compile Include="DAC\DeviceUrls.cs" />
-    <Compile Include="DAC\StandardCodes.cs" />
-    <Compile Include="DAC\CreditReasonCode.cs" />
-    <Compile Include="DAC\DebitReasonCode.cs" />
-    <Compile Include="DAC\ProductTypeZRA.cs" />
-    <Compile Include="DAC\SalesReceiptType.cs" />
-    <Compile Include="DAC\StockInOut.cs" />
-    <Compile Include="DAC\TransactionProgress.cs" />
-    <Compile Include="DAC\TransactionTypeZRA.cs" />
-    <Compile Include="DAC\RegistrationType.cs" />
-    <Compile Include="DAC\ImportItem.cs" />
-    <Compile Include="DAC\SalesCategory.cs" />
-    <Compile Include="DAC\ZraLogs.cs" />
-    <Compile Include="TenantVisibility.cs" />
-    <Compile Include="Graph\RefreshTokenEntry.cs" />
-    <Compile Include="DAC\DeviceToken.cs" />
-    <Compile Include="BranchEtims.cs" />
-    <Compile Include="DAC Extensions\APInvoiceEntry_Extension_Etims.cs" />
-    <Compile Include="DAC Extensions\APRegister_Extension.cs" />
-    <Compile Include="DAC Extensions\APTran_Extension.cs" />
-    <Compile Include="Graph Extensions\SOInvoiceEntry.cs" />
-    <Compile Include="DAC Extensions\SOLine_Extension.cs" />
-    <Compile Include="Graph Extensions\SOOrderEntry.cs" />
-    <Compile Include="DAC Extensions\SOOrder_Extensions.cs" />
-    <Compile Include="Graph Extensions\ARInvoiceEntry.cs" />
-    <Compile Include="DAC Extensions\ARRegister_Extension.cs" />
-    <Compile Include="DAC Extensions\ARSetup_Ext.cs" />
-    <Compile Include="DAC Extensions\ARTran_Extension.cs" />
-    <Compile Include="DAC Extensions\PaymentMethod_Extension.cs" />
-    <Compile Include="DAC Extensions\PayMethod_Ext.cs" />
-    <Compile Include="Graph Extensions\PaymentMethodMaint.cs" />
-    <Compile Include="DAC Extensions\INTran_Ext.cs" />
-    <Compile Include="Graph Extensions\INAdjustmentEntry_Extension_Etims.cs" />
-    <Compile Include="Graph Extensions\INTransferEntry_Extension_Etims.cs" />
-    <Compile Include="Graph Extensions\KitAssemblyEntry_Extension_Etims.cs" />
-    <Compile Include="DAC Extensions\INItemClass_Extension.cs" />
-    <Compile Include="Graph Extensions\INItemClassMaint.cs" />
-    <Compile Include="DAC Extensions\INItemSite_Extension.cs" />
-    <Compile Include="DAC Extensions\InventoryItem_Extension.cs" />
-    <Compile Include="Graph Extensions\InventoryItemMaint.cs" />
-    <Compile Include="Graph Extensions\NonStockItemMaint.cs" />
-    <Compile Include="DAC Extensions\INKitRegister_Ext.cs" />
-    <Compile Include="DAC Extensions\INRegister_Ext.cs" />
-    <Compile Include="Examples.cs" />
-    <Compile Include="SampleGraph.cs" />
-    <Compile Include="1Examples.cs" />
-    <Compile Include="MyCustomTable.cs" />
-    <Compile Include="AssemblyInfo.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
